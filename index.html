@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jiboner Hisab</title>
+    <style>
+        body {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .blue {
+            color: blue;
+        }
+
+        form input {
+            height: 50px;
+            width: 300px;
+        }
+
+        #date,
+        #expenditure {
+            /* //width: 28px; */
+            height: 28px;
+        }
+
+        .singleDay {
+            padding: 2%;
+            margin: 20px;
+            text-align: center;
+            border: 1px solid lightgray;
+            box-shadow: 10px 10px 5px gray;
+        }
+
+        ul li {
+            list-style-type: none;
+        }
+
+        .singleDay div {
+            color: red;
+            font-size: 1.5em;
+            background-color: black;
+            padding: 2%;
+        }
+
+        .singleDay div h3 {
+            color: yellow;
+        }
+
+        .singleDay h1 {
+            color: blue;
+            border: 1px solid maroon;
+        }
+
+        #mark-border {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>আমার জীবনের প্রতিটি দিনের হিসাব</h1>
+    <p class="blue">আমি একজন ওয়েব ডেভেলপার ও শিক্ষক হতে চাই।</p>
+    <div id="myDays">
+
+    </div>
+    <div id="form">
+        <form action="/addMyDay" method="post">
+            <label for="date">Date: </label>
+            <input id="date" name="date" placeholder="03 April, 2021">
+            <label for="namaj">5 Oakto Namaj: </label>
+            <input id="namaj" name="namaj" placeholder="OK/Not OK">
+            <br><br>
+            <p>Priority Work: </p>
+            <input id="priorityWork1" name="priorityWork1" placeholder="list-1">
+            <input id="priorityWork2" name="priorityWork2" placeholder="list-2">
+            <input id="priorityWork3" name="priorityWork3" placeholder="list-3">
+            <br />
+            <br />
+            <p>Less Important Work: </p>
+            <input id="lessImportantWork1" name="lessImportantWork1" placeholder="list-1">
+            <input id="lessImportantWork2" name="lessImportantWork2" placeholder="list-2">
+            <br /><br />
+            <label for="workDone">Is priority work done? If no why?</label>
+            <input id="workDone" name="workDone" placeholder="yes/no/why?">
+            <br />
+            <br />
+            <label for="valoKaj">Ekti valo kaj</label>
+            <input id="valoKaj" name="valoKaj" placeholder="valoKaj">
+            <br /><br />
+            <label for="ayat">one ayat per day</label>
+            <input id="ayat" name="ayat" placeholder="ayat">
+            <label for="expenditure">Expenditure: </label>
+            <input id="expenditure" name="expenditure" placeholder="20 Taka">
+            <br />
+            <br />
+            <label for="hadith">one Hadith per day</label>
+            <input id="hadith" name="hadith" placeholder="hadith">
+            <label for="motivation">Motivation</label>
+            <input id="motivation" name="motivation" placeholder="motivation">
+            <br><br>
+            <label for="idea">Idea</label>
+            <input id="idea" name="idea" placeholder="idea">
+            <label for="gonah">Gonah: </label>
+            <input id="gonah" name="gonah" placeholder="gonah">
+            <br /><br />
+            <button type="submit">Add Your Day</button>
+        </form>
+    </div>
+    <p>একটু পর আমি মরতে পারি, মরার আগে কিছু করতে চাই।</p>
+    <div id="update">
+
+    </div>
+    <script>
+        fetch('/myDays')
+            .then(res => res.json())
+            .then(myDays => {
+                //console.log(myDays)
+                const container = document.getElementById('myDays');
+                myDays.forEach(myDay => {
+                    const item = document.createElement('div');
+                    item.innerHTML = `<div class="singleDay">
+                        <h1>${myDay.date}</h1>
+                        <div>
+                            <button onclick="updateDay('${myDay._id}')">Update This Day</button>
+                            <h3>৫ ওয়াক্ত নামাজ</h3>
+                            <p>${myDay.namaj}</p>
+                        </div>
+                        <div>
+                            <h3>গুরুত্বপূর্ণ কাজ</h3>
+                            <ul>
+                                <li>${myDay.priorityWork1}</li>
+                                <li>${myDay.priorityWork2}</li>
+                                <li>${myDay.priorityWork3}</li>
+                            </ul>
+                        </div>
+                         <div>
+                            <h3>কম গুরুত্বপূর্ণ কাজ</h3> 
+                            <ul>
+                                <li>${myDay.lessImportantWork1}</li>
+                                <li>${myDay.lessImportantWork2}</li>
+                            </ul>
+                        </div>
+                        <div id="mark-border">
+                            <h3>গুরুত্বপূর্ণ কাজ কি শেষ হয়েছে? না হলে কারণ কি?</h3>
+                            <p>${myDay.workDone}</p>
+                        </div>
+                        <div>
+                            <h3>একটি ভালো কাজ</h3>
+                            <p>${myDay.valoKaj}</p> 
+                        </div>
+                        <div>
+                            <h3>একটি কুরআনের আয়াত</h3> 
+                            <p>${myDay.ayat}</p>
+                        </div>
+                        <div>
+                            <h3>একটি হাদিসঃ</h3> 
+                            <p>${myDay.hadith}</p>
+                        </div>
+                        <div>
+                            <h3>মোটিভেশনঃ</h3> 
+                            <p>${myDay.motivation}</p> 
+                        </div>
+                        <div>
+                            <h3>আইডিয়া/গল্প/মুভি</h3>  
+                            <p>${myDay.idea}</p> 
+                        </div>
+                        <div>
+                            <h3>গোনাহ</h3>  
+                            <p>${myDay.gonah}</p>  
+                        </div>
+                    </div>`;
+                    container.appendChild(item);
+                });
+            });
+        function loadDay(id, display) {
+            fetch(`/myDay/${id}`)
+                .then(res => res.json())
+                .then(singleDay => {
+                    const update = document.getElementById('update');
+                    update.innerHTML = `
+                    <div>
+                        <label for="date">Date: </label>
+                        <input id="date" name="date" value="${singleDay.date}">
+                        <label for="namaj">5 Oakto Namaj: </label>
+                        <input id="namaj" name="namaj" value="${singleDay.namaj}">
+                        <br><br>
+                        <p>Priority Work: </p>
+                        <input id="priorityWork1" name="priorityWork1" value="${singleDay.priorityWork1}">
+                        <input id="priorityWork2" name="priorityWork2" value="${singleDay.priorityWork2}">
+                        <input id="priorityWork3" name="priorityWork3" value="${singleDay.priorityWork3}">
+                        <br />
+                        <br />
+                        <p>Less Important Work: </p>
+                        <input id="lessImportantWork1" name="lessImportantWork1" value="${singleDay.lessImportantWork1}">
+                        <input id="lessImportantWork2" name="lessImportantWork2" value="${singleDay.lessImportantWork2}">
+                        <br /><br />
+                        <label for="workDone">Is priority work done? If no why?</label>
+                        <input id="workDone" name="workDone" value="${singleDay.workDone}">
+                        <br /
+                        <br />
+                        <label for="valoKaj">Ekti valo kaj</label>
+                        <input id="valoKaj" name="valoKaj" value="${singleDay.valoKaj}">
+                        <br /><br />
+                        <label for="ayat">one ayat per day</label>
+                        <input id="ayat" name="ayat" value="${singleDay.ayat}">
+                        <label for="expenditure">Expenditure: </label>
+                        <input id="expenditure" name="expenditure" value="${singleDay.expenditure}">
+                        <br />
+                        <br />
+                        <label for="hadith">one Hadith per day</label>
+                        <input id="hadith" name="hadith" value="${singleDay.hadith}">
+                        <label for="motivation">Motivation</label>
+                        <input id="motivation" name="motivation" value="${singleDay.motivation}">
+                        <br><br>
+                        <label for="idea">Idea</label>
+                        <input id="idea" name="idea" value="${singleDay.idea}">
+                        <label for="gonah">Gonah: </label>
+                        <input id="gonah" name="gonah" value="${singleDay.gonah}">
+                        <br /><br />
+                        <button onclick="loadDay('${singleDay._id}', 'none')">Update This Day</button>
+                    </div>
+                   `;
+                    if (display === 'none') {
+                        document.getElementById('form').style.display = "none";
+                    }
+                });
+        }
+        function updateDay(id) {
+                const date = document.getElementById('date').value;
+                const namaj = document.getElementById('namaj').value;
+                const priorityWork1 = document.getElementById('priorityWork1').value;
+                const priorityWork2 = document.getElementById('priorityWork2').value;
+                const priorityWork3 = document.getElementById('priorityWork3').value;
+                const lessImportantWork1 = document.getElementById('lessImportantWork1').value;
+                const lessImportantWork2 = document.getElementById('lessImportantWork1').value;
+                const workDone = document.getElementById('workDone').value;
+                const valoKaj = document.getElementById('valoKaj').value;
+                const ayat = document.getElementById('ayat').value;
+                const hadith = document.getElementById('hadith').value;
+                const motivation = document.getElementById('motivation').value;
+                const idea = document.getElementById('idea').value;
+                const gonah = document.getElementById('gonah').value;
+                const days = {date, namaj, priorityWork1, priorityWork2, priorityWork3, lessImportantWork1, lessImportantWork2, workDone, valoKaj, ayat, hadith, motivation, idea, gonah};
+                fetch(`/update/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(days)
+                })
+                    .then(res => res.json())
+                    .then(result => {
+                        console.log('updated');
+                        loadDay();
+                        document.getElementById('update').innerHTML = '';
+                    })
+             }
+    </script>
+</body>
+
+</html>
